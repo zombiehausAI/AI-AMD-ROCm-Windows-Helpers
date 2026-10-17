@@ -1,5 +1,12 @@
 # AMD ROCm Windows Helpers & Utilities
 
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078D4?logo=windows&logoColor=white)](#system-prerequisites)
+[![AMD ROCm](https://img.shields.io/badge/AMD%20ROCm-7.2.1-ED1C24?logo=amd&logoColor=white)](https://rocm.docs.amd.com/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-5391FE?logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen)](https://opensource.org/licenses/MIT)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/zombiehaus)
+
 A curated collection of automation scripts, runtime patches, and technical guides designed to deploy and run modern generative AI workloads natively on **Windows** using **AMD ROCm™**.
 
 > [!NOTE]
@@ -108,3 +115,27 @@ To provision a standalone AI-Toolkit training environment:
 ```
 
 Refer to the [AI-Toolkit Standalone Guide](amd-ai-toolkit-standalone/AMD_AI_TOOLKIT_STANDALONE.md) for training configuration examples and troubleshooting.
+
+---
+
+## Shoutouts & Acknowledgements
+
+Massive appreciation to the open-source projects, tools, and maintainers that made these helpers possible, power our daily AI workflows, and continuously inspire the generative AI ecosystem:
+
+- **[LoRAMancer](https://github.com/zombiehausAI/LoRAMancer)** — Open-source desktop LoRA management, training, and diagnostic studio whose Windows AMD ROCm integration inspired and originated these runtime fixes.
+- **[ostris / ai-toolkit](https://github.com/ostris/ai-toolkit)** — The premier, extensible training framework for fine-tuning modern diffusion models (Flux, Chroma, SDXL, SD 1.5).
+- **[comfyanonymous / ComfyUI](https://github.com/comfyanonymous/ComfyUI)** — The powerful, modular node-based diffusion architecture at the core of our daily generative workflows.
+- **[ltdrdata / ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager)** — The essential extension manager that keeps custom nodes and models updated and accessible.
+- **[kohya-ss / sd-scripts](https://github.com/kohya-ss/sd-scripts)** — The pioneering training suite that established the standards for accessible LoRA fine-tuning across the open-source AI community.
+- **[AUTOMATIC1111 / stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)** — The trailblazing web UI that kicked off the open-source generative AI revolution and remains a daily inspiration.
+- **[PyTorch](https://github.com/pytorch/pytorch)** & **[PyTorch AO](https://github.com/pytorch/ao)** — The foundational machine learning framework and low-bit optimization / quantization libraries.
+- **[AMD ROCm™](https://github.com/ROCm/ROCm)** — The open software platform and HIP runtime enabling native Windows GPU acceleration.
+- **[Hugging Face](https://github.com/huggingface)** ([`diffusers`](https://github.com/huggingface/diffusers), [`accelerate`](https://github.com/huggingface/accelerate), [`transformers`](https://github.com/huggingface/transformers)) — Foundational libraries powering diffusion architectures, schedulers, and training execution.
+
+---
+
+## Support & Contributions
+
+If you find these helpers, setup scripts, or runtime patches useful for your AMD Windows AI workflows, consider supporting ongoing development:
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/zombiehaus)

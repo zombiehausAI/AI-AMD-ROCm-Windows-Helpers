@@ -12,20 +12,20 @@ Historically, training LoRAs with AI-Toolkit on **Windows with AMD Radeon GPUs**
 3. Upstream libraries (`torchao`, `diffusers`, and `accelerate`) unconditionally import distributed tensors (`DTensor`), causing fatal crashes on Windows.
 4. The Windows port of `rocm_sdk` attempts to query Linux `.so` shared objects during module initialization.
 
-This document outlines the **architectural mechanics of the runtime patches developed in this project** and how to deploy a 100% standalone, fully functional AMD ROCm AI-Toolkit training environment using the companion automation script [`Setup-AmdAiToolkit.ps1`](../Utilities/Setup-AmdAiToolkit.ps1).
+This document outlines the **architectural mechanics of the runtime patches developed in this project** and how to deploy a 100% standalone, fully functional AMD ROCm AI-Toolkit training environment using the companion automation script [`Setup-AmdAiToolkit.ps1`](Setup-AmdAiToolkit.ps1).
 
 > [!NOTE]
 > **Project Context & Disclaimer**:
 > - **Proof of Concept**: This setup script and patch collection represent an early **proof of concept** created to overcome current Windows AMD ROCm hurdles. While this setup has been tested and verified on our local hardware (Radeon RX 9070 XT), AMD hardware configurations, Windows driver versions, and environments can differ significantly—what works seamlessly in our test environment may require adjustments or further testing on yours. Community feedback and real-world testing are warmly welcomed!
 > - **Performance Expectation (AMD vs. NVIDIA)**: Native Windows AMD ROCm training may currently be slower than native NVIDIA CUDA training due to early Windows ROCm driver maturity and attention kernel optimizations. However, it is **fully working natively on Windows** without requiring dual-boot Linux configurations, heavy WSL2 virtual machines, or restrictive DirectML fallbacks.
 > - **AI-Assisted Development**: These scripts, patches, and documentation were created with AI assistance. In the spirit of complete transparency: if you prefer not to use AI-assisted code, please feel free to pass on this script and wait for official upstream Windows ROCm fixes from the respective project maintainers.
-> - **LoRAMancer Context**: These fixes originated as part of **LoRAMancer** (an upcoming desktop LoRA manager and training orchestrator, currently **unreleased / in private development**). It is not yet released publicly because we are currently in deep hardware validation, thorough testing, critical bug fixing, and UI polish stages. Once ready, LoRAMancer will be 100% open source and we will warmly welcome community contributions! We are sharing this standalone setup script early to give fellow AMD creators a working solution without having to wait for the complete desktop suite.
+> - **LoRAMancer Integration**: These fixes originated as part of [**LoRAMancer**](https://github.com/zombiehausAI/LoRAMancer) (an open-source desktop LoRA management, training, and diagnostic studio). If you prefer a full graphical UI with dataset management, automated parameter configurations, and integrated training orchestration, check out the [LoRAMancer repository](https://github.com/zombiehausAI/LoRAMancer). We also maintain this standalone setup script and technical guide for developers and creators who prefer working directly in terminal environments, automated batch scripts, or bespoke pipelines.
 
 ---
 
 ## Why a Standalone Utility?
 
-While **LoRAMancer** (currently unreleased) provides a full graphical desktop UI, SQLite library management, and hyperparameter cloning wizard, many engineers and creators in the open-source community prefer working directly from terminal environments, automated batch scripts, or their own bespoke pipelines.
+While [**LoRAMancer**](https://github.com/zombiehausAI/LoRAMancer) provides a full graphical desktop UI, SQLite library management, training diagnostics, and hyperparameter cloning wizard, many engineers and creators in the open-source community prefer working directly from terminal environments, automated batch scripts, or their own bespoke pipelines.
 
 Releasing this setup script and technical document empowers AMD users worldwide to train LoRAs on Windows immediately, without waiting for upstream PR merges across multiple independent repositories (`torchao`, `diffusers`, `accelerate`, and `ai-toolkit`).
 
