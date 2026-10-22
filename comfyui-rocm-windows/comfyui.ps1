@@ -52,6 +52,7 @@ $ROCM_SDK_WHEELS = @(
 # Base startup arguments passed to main.py
 $STARTUP_OPTIONS = @(
     "--disable-smart-memory",
+    "--disable-pinned-memory",
     "--output-directory", "`"$OUTPUT_DIRECTORY`"",
     "--user-directory", "`"$USER_DIRECTORY`"",
     "--reserve-vram", "0.9",
@@ -79,7 +80,8 @@ function Test-AmdGpu {
         }
         
         return $script:IsAmdGpuCached
-    } catch {
+    }
+    catch {
         $script:IsAmdGpuCached = $false
         return $false
     }
@@ -124,7 +126,8 @@ function Test-Dependencies {
                             Write-Warning "AMD GPU detected, but system-wide ROCm installation not found."
                             Write-Warning "Ensure AMD Adrenalin drivers or ROCm Windows packages are installed."
                         }
-                    } else {
+                    }
+                    else {
                         Write-Host "-> ROCm drivers detected."
                     }
                 }
@@ -178,7 +181,8 @@ function Install-RocmSdk {
             $patch = "`n# [comfyui-script] windows-missing-libs`n" + ($missingEntries -join "`n") + "`n"
             Add-Content -Path $distInfoPath -Value $patch
             Write-Host "  > Patched rocm_sdk _dist_info.py with missing Windows library stubs ($($missingEntries.Count) entries added)."
-        } else {
+        }
+        else {
             Write-Host "  > rocm_sdk _dist_info.py already contains all required library stubs; no patch needed."
         }
     }
@@ -212,7 +216,8 @@ function Install-PythonDeps {
                 throw "Failed to install PyTorch ROCm wheels"
             }
             Install-RocmSdk
-        } else {
+        }
+        else {
             Write-Host "  > PyTorch $PYTORCH_TORCH_VERSION already installed, skipping."
         }
     }
@@ -235,7 +240,8 @@ function Install-ComfyUI {
         if ($LASTEXITCODE -ne 0) {
             throw "Failed to clone ComfyUI repository"
         }
-    } else {
+    }
+    else {
         Write-Host "ComfyUI directory already exists at $COMFYUI_PATH. Verifying setup..."
     }
 
@@ -254,7 +260,8 @@ function Install-ComfyUI {
         if ($LASTEXITCODE -ne 0) {
             throw "Failed to create virtual environment"
         }
-    } else {
+    }
+    else {
         Write-Host "Python virtual environment already exists."
     }
 
@@ -308,10 +315,12 @@ function Update-ComfyUI {
             if ($hasMain) {
                 Write-Host "  > Switching to 'main' branch."
                 git checkout main
-            } elseif ($hasMaster) {
+            }
+            elseif ($hasMaster) {
                 Write-Host "  > Switching to 'master' branch."
                 git checkout master
-            } else {
+            }
+            else {
                 Write-Host "  ! Could not find 'main' or 'master' branch. Update skipped."
                 throw "No default branch found"
             }
@@ -327,10 +336,12 @@ function Update-ComfyUI {
         # Install/update Python requirements for ComfyUI core
         $reqFile = Join-Path $COMFYUI_PATH "requirements.txt"
         Install-PythonDeps -RequirementsFile $reqFile -UpgradeTorch
-    } catch {
+    }
+    catch {
         Write-Error "  ! Failed to update or install requirements for ComfyUI. Please check manually."
         $comfyUiFailed = $true
-    } finally {
+    }
+    finally {
         Pop-Location
     }
 
@@ -338,7 +349,8 @@ function Update-ComfyUI {
     $customNodesPath = Join-Path $COMFYUI_PATH "custom_nodes"
     if (-not (Test-Path $customNodesPath)) {
         Write-Host "-> Custom nodes directory not found. Skipping node updates."
-    } else {
+    }
+    else {
         Write-Host "-> Updating custom nodes..."
         Get-ChildItem -Path $customNodesPath -Directory | ForEach-Object {
             $nodeDir = $_.FullName
@@ -366,10 +378,12 @@ function Update-ComfyUI {
                         if ($hasMain) {
                             Write-Host "    > Switching to 'main' branch."
                             git checkout main
-                        } elseif ($hasMaster) {
+                        }
+                        elseif ($hasMaster) {
                             Write-Host "    > Switching to 'master' branch."
                             git checkout master
-                        } else {
+                        }
+                        else {
                             Write-Host "    ! Could not find 'main' or 'master' branch. Update skipped."
                             throw "No default branch found"
                         }
@@ -387,10 +401,12 @@ function Update-ComfyUI {
 
                     $nodeReqFile = Join-Path $nodeDir "requirements.txt"
                     Install-PythonDeps -RequirementsFile $nodeReqFile
-                } catch {
+                }
+                catch {
                     Write-Error "  ! Failed to update or install requirements for node: $nodeName. Please check manually."
                     $failedNodes.Add($nodeName)
-                } finally {
+                }
+                finally {
                     Pop-Location
                 }
             }
@@ -402,9 +418,11 @@ function Update-ComfyUI {
     Write-Host "===== Update Report =====" -ForegroundColor Cyan
     if ($comfyUiFailed) {
         Write-Host "  ComfyUI core:   FAILED" -ForegroundColor Red
-    } elseif ($comfyUiUpdated) {
+    }
+    elseif ($comfyUiUpdated) {
         Write-Host "  ComfyUI core:   Updated" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "  ComfyUI core:   Already up to date"
     }
     Write-Host "  Custom nodes updated:  $($updatedNodes.Count)"
@@ -429,7 +447,8 @@ function Test-Running {
         try {
             $null = Get-Process -Id $processId -ErrorAction Stop
             return $true
-        } catch {
+        }
+        catch {
             return $false
         }
     }
@@ -468,8 +487,8 @@ function Start-ComfyUI {
             (Join-Path $venvSitePackages "_rocm_sdk_libraries_custom\bin")
         )
         $rocmBin = Get-ChildItem "C:\Program Files\AMD\ROCm" -Directory -ErrorAction SilentlyContinue |
-            Sort-Object Name -Descending | Select-Object -First 1 |
-            ForEach-Object { Join-Path $_.FullName "bin" }
+        Sort-Object Name -Descending | Select-Object -First 1 |
+        ForEach-Object { Join-Path $_.FullName "bin" }
         if ($rocmBin) {
             $dllPaths += $rocmBin
         }
@@ -539,14 +558,17 @@ function Stop-ComfyUI {
         
         if ($waited) {
             Write-Host "ComfyUI stopped."
-        } else {
+        }
+        else {
             Write-Host "ComfyUI did not terminate within 5 seconds. Forcing shutdown..."
             Stop-Process -Id $processId -Force
             Write-Host "ComfyUI stopped forcefully."
         }
-    } catch {
+    }
+    catch {
         Write-Host "Process not found or already terminated."
-    } finally {
+    }
+    finally {
         Remove-Item $PID_FILE -ErrorAction SilentlyContinue
     }
 }
@@ -579,7 +601,8 @@ function Show-Status {
     if (Test-Running) {
         $processId = (Get-Content $PID_FILE -Raw).Trim()
         Write-Host "ComfyUI is running with PID $processId."
-    } else {
+    }
+    else {
         Write-Host "ComfyUI is stopped."
     }
 }
@@ -613,7 +636,8 @@ switch ($command.ToLower()) {
         if ($updateSuccess -and $wasRunning) {
             Write-Host "-> Restarting ComfyUI after successful update..."
             Start-ComfyUI
-        } elseif (-not $updateSuccess) {
+        }
+        elseif (-not $updateSuccess) {
             Write-Error "Error: Update failed. ComfyUI will not be restarted. Please inspect logs."
         }
     }
